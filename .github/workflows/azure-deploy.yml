@@ -25,7 +25,7 @@ jobs:
     - name: Build application
       run: npm run build
       env:
-        MONGODB_URI: 'mongodb://dummy:27017' # Dummy value for build
+        MONGODB_URI: 'mongodb://dummy:27017'
 
     - name: Show build output
       run: ls -la .next/
@@ -42,18 +42,17 @@ jobs:
     - name: Login to Azure
       uses: azure/login@v2
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
     - name: Deploy to Azure App Service
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ secrets.AZURE_APP_NAME }}
-        publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
         package: .
 
     - name: Logout from Azure
       run: |
         az logout
-        if [ -f "$HOME/.azure/azureProfile.json" ]; then
-          rm -f $HOME/.azure/azureProfile.json
-        fi
