@@ -25,7 +25,7 @@ jobs:
     - name: Build application
       run: npm run build
       env:
-        MONGODB_URI: 'mongodb://dummy:27017'
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}  
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
@@ -44,7 +44,7 @@ jobs:
       with:
         name: nextjs-app
 
-    - name: Install production dependencies  # ← CRITICAL FIX ADDED
+    - name: Install production dependencies
       run: npm ci --production
 
     - name: Login to Azure
